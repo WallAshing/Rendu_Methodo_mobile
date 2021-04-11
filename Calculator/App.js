@@ -4,8 +4,8 @@ import { View, Text, AppRegistry } from 'react-native';
 import InputButton from './src/InputButton';
 
 const inputButtons = [
-    [1, 2, 3, '÷'],
-    [4, 5, 6, 'x'],
+    [1, 2, 3, '/'],
+    [4, 5, 6, '*'],
     [7, 8, 9, '-'],
     [0, ',', 'C', 'CE', '=', '+']
 ];
@@ -83,8 +83,8 @@ class ReactCalculator extends Component {
     }
     _handleStringInput(str) {
         switch (str) {
-            case '÷':
-            case 'x':
+            case '/':
+            case '*':
             case '+':
             case '-':
                 this.setState({
@@ -102,13 +102,14 @@ class ReactCalculator extends Component {
                 break;
 
             case 'C':
+                let Value = this.state.inputValue
                 if(int){
                     this.setState({
-                        inputValue: (Math.floor((this.state.inputValue * (10 ** int)) / 10)) / (10 ** int)
+                        inputValue: (Math.floor((Value * (10 ** int)) / 10)) / (10 ** int)
                     });
                 }else{
                     this.setState({
-                        inputValue: Math.floor(this.state.inputValue / 10)
+                        inputValue: Math.floor(Value / 10)
                     });
                     
                 }
@@ -126,6 +127,19 @@ class ReactCalculator extends Component {
 
                 if (!symbol) {
                     return;
+                }
+
+                if (symbol == '/' && inputValue == 0){
+                    this.setState({
+                        inputValue: "Error"
+                    }); 
+                    setTimeout(() => {
+                        this.setState({
+                            inputValue: 0,
+                            previousInputValue: 0
+                        }); 
+                    }, 1000);
+                    break;
                 }
 
                 this.setState({
